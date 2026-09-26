@@ -25,6 +25,11 @@ void display() {
     glLoadIdentity();
 
     camera.apply();
+
+    // Position light above the center of the maze
+    GLfloat lightPos[] = {7.5f, 10.0f, 7.5f, 1.0f};  // w=1.0 = point light
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+
     maze.draw();
 
     glutSwapBuffers();
@@ -101,6 +106,21 @@ int main(int argc, char** argv) {
 
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glEnable(GL_DEPTH_TEST);
+
+    // Enable lighting
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_COLOR_MATERIAL);
+    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+
+    // Light properties
+    GLfloat ambientLight[] = {0.3f, 0.3f, 0.3f, 1.0f};
+    GLfloat diffuseLight[] = {0.8f, 0.8f, 0.8f, 1.0f};
+    GLfloat specularLight[] = {0.2f, 0.2f, 0.2f, 1.0f};
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
 
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);

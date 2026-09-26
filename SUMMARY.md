@@ -98,3 +98,38 @@ Implemented a first-person camera system with WASD movement, mouse look, and wal
 - Mouse controls view direction (horizontal + vertical)
 - Cannot walk through walls (collision + wall sliding works)
 - ESC quits the application
+
+---
+
+## Task 4: Lighting
+**Branch:** `feature/lighting`  
+**Date:** 2026-09-26
+
+### Description
+Added OpenGL fixed-function lighting to give the maze depth and atmosphere. Walls now have visible shading based on their orientation relative to the light source.
+
+### Changes
+- Modified `src/main.cpp`:
+  - Enabled `GL_LIGHTING`, `GL_LIGHT0`, `GL_COLOR_MATERIAL` in `main()` initialization
+  - Set `glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE)` so existing `glColor3f` calls in maze.cpp serve as material colors automatically
+  - Configured light properties: ambient (0.3), diffuse (0.8), specular (0.2) — enough ambient to see in shadow, strong diffuse for visible shading
+  - Point light positioned at (7.5, 10.0, 7.5) — centered above the 15×15 maze
+  - Light position set in `display()` after `camera.apply()` so it remains fixed in world space
+
+### No Other Files Modified
+- `src/maze.cpp` already had correct `glNormal3f` calls on all 6 cube faces and the floor from Task 2
+- Camera and input systems untouched
+
+### Review Notes
+- Reviewer passed with no issues — lighting setup, positioning, and material configuration all approved
+
+### Tools Used
+- OpenGL fixed-function lighting pipeline (GL_LIGHT0, glLightfv)
+- GL_COLOR_MATERIAL for automatic material-from-color
+
+### Verification
+- Compiles cleanly
+- Walls have visible shading — faces toward the light are brighter, away are darker
+- Floor is lit
+- Moving through the maze feels more 3D due to lighting cues
+- No regressions to movement, collision, or input
