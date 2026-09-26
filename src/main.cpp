@@ -1,9 +1,23 @@
 #include <GL/glut.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include "maze.h"
+
+Maze maze;
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+
+    // Static bird's-eye camera for now
+    gluLookAt(
+        7.5, 18.0, 20.0,   // Eye position (above and behind)
+        7.5,  0.0,  7.5,   // Look-at center of maze
+        0.0,  1.0,  0.0    // Up vector
+    );
+
+    maze.draw();
+
     glutSwapBuffers();
 }
 
