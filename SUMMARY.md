@@ -133,3 +133,42 @@ Added OpenGL fixed-function lighting to give the maze depth and atmosphere. Wall
 - Floor is lit
 - Moving through the maze feels more 3D due to lighting cues
 - No regressions to movement, collision, or input
+
+---
+
+## Task 5: Polish — Minimap, Ceiling & Final Touches
+**Branch:** `feature/polish`  
+**Date:** 2026-09-26
+
+### Description
+Added a 2D orthographic minimap overlay in the top-right corner, ceiling rendering, and alpha blending for minimap transparency.
+
+### Changes
+- Modified `include/maze.h`:
+  - Declared private `drawCeiling()` helper method
+- Modified `src/maze.cpp`:
+  - Implemented `drawCeiling()` rendering a dark gray-blue quad at y = 2.0 with downward normal (0, -1, 0)
+  - Called `drawCeiling()` in `draw()` after `drawFloor()`
+- Modified `src/main.cpp`:
+  - Added `#include <cmath>` for trigonometric functions
+  - Implemented `drawMinimap()` rendering a 2D orthographic projection HUD overlay:
+    - 150x150 semi-transparent dark background (alpha = 0.7)
+    - Grid representation with brown walls and dark gray paths
+    - Yellow square dot indicating player position
+    - Yellow line indicating player orientation (yaw)
+  - Called `drawMinimap()` in `display()` between `maze.draw()` and `glutSwapBuffers()`
+  - Enabled alpha blending (`GL_BLEND`, `glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)`) in `main()`
+
+### Review Notes
+- Reviewer found minimap grid cells used `glColor3f` (implicit alpha 1.0), making the minimap fully opaque despite the semi-transparent background — fixed by switching to `glColor4f` with alpha 0.7
+- Reviewer confirmed ceiling winding order is correct (CCW from below matches -Y normal)
+
+### Tools Used
+- OpenGL orthographic projection (`glOrtho`) and matrix stack push/pop
+- OpenGL fixed-function alpha blending (`glBlendFunc`)
+- C++ math library (`cosf`, `sinf`)
+
+### Verification
+- Compiles cleanly with CMake and make
+- Headless execution with timeout runs smoothly without crashes
+

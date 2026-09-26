@@ -105,6 +105,18 @@ void Maze::drawCube(float x, float z) const {
     glEnd();
 }
 
+void Maze::drawCeiling() const {
+    glColor3f(0.3f, 0.3f, 0.35f);  // Dark gray-blue ceiling
+    glNormal3f(0.0f, -1.0f, 0.0f);
+
+    glBegin(GL_QUADS);
+    glVertex3f(0.0f, 2.0f, 0.0f);
+    glVertex3f((float)WIDTH, 2.0f, 0.0f);
+    glVertex3f((float)WIDTH, 2.0f, (float)HEIGHT);
+    glVertex3f(0.0f, 2.0f, (float)HEIGHT);
+    glEnd();
+}
+
 void Maze::drawFloor() const {
     glColor3f(0.2f, 0.5f, 0.2f);
     glNormal3f(0.0f, 1.0f, 0.0f);
@@ -119,6 +131,7 @@ void Maze::drawFloor() const {
 
 void Maze::draw() const {
     drawFloor();
+    drawCeiling();
 
     for (int z = 0; z < HEIGHT; z++) {
         for (int x = 0; x < WIDTH; x++) {
