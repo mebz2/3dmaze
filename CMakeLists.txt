@@ -11,7 +11,7 @@ find_package(OpenGL REQUIRED)
 # Find GLUT (works with FreeGLUT)
 find_package(GLUT REQUIRED)
 
-add_executable(3DMaze src/main.cpp src/maze.cpp)
+add_executable(3DMaze src/main.cpp src/maze.cpp src/camera.cpp)
 
 target_include_directories(3DMaze PRIVATE include)
 
