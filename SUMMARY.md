@@ -55,3 +55,46 @@ Added a hardcoded 15×15 maze grid and rendered it as 3D colored walls with a gr
 ### Verification
 - Compiles cleanly with no warnings
 - Running the program shows a bird's-eye view of the maze with brown walls on a green floor
+
+---
+
+## Task 3: First-Person Camera & Movement
+**Branch:** `feature/first-person-camera`  
+**Date:** 2026-09-26
+
+### Description
+Implemented a first-person camera system with WASD movement, mouse look, and wall collision detection, allowing the player to navigate through the maze interactively.
+
+### Changes
+- Created `include/camera.h` — Camera class with position (x,y,z), yaw/pitch angles, movement methods taking const Maze& for collision, mouse look, getters for minimap use
+- Created `src/camera.cpp` — Full implementation:
+  - `apply()` computes look-at target from yaw/pitch using `gluLookAt`
+  - `canMove()` checks 4 corners of a 0.2-radius bounding box against `maze.isWall()`
+  - Movement with wall-sliding: tries full diagonal move first, falls back to X-only or Z-only
+  - `look()` applies mouse sensitivity (0.15), clamps pitch to ±89° to prevent gimbal flip
+  - Strafing computed via yaw ± 90°
+- Rewrote `src/main.cpp`:
+  - Flag-based WASD input (glutKeyboardFunc + glutKeyboardUpFunc) for smooth movement
+  - Mouse look via glutPassiveMotionFunc with warp-to-center and firstMouse guard
+  - Timer-based game loop at ~60fps (16ms interval) for consistent movement
+  - ESC key exits the program
+  - Cursor hidden with glutSetCursor(GLUT_CURSOR_NONE)
+  - Player starts at (1.5, 1.0, 1.5) — cell (1,1), eye at half wall height
+  - FOV changed to 60° for natural first-person feel
+  - Background changed to dark gray (0.1, 0.1, 0.1)
+- Modified `CMakeLists.txt` — Added `src/camera.cpp` to sources
+
+### Review Notes
+- Reviewer passed with no issues — all collision, camera, and input mechanics approved
+
+### Tools Used
+- OpenGL fixed-function pipeline (gluLookAt, gluPerspective)
+- FreeGLUT input callbacks (keyboard, passive motion, timer)
+- C++ math (cosf, sinf for direction vectors)
+
+### Verification
+- Compiles cleanly
+- Player walks through maze in first person with WASD
+- Mouse controls view direction (horizontal + vertical)
+- Cannot walk through walls (collision + wall sliding works)
+- ESC quits the application
