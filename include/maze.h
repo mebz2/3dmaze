@@ -28,6 +28,9 @@ private:
 
     // Draw the floor plane
     void drawFloor() const;
+
+    // Draw the ceiling plane
+    void drawCeiling() const;
 };
 
 #endif
